@@ -1,0 +1,63 @@
+class Solution {
+    private:
+    
+    vector<int>nextSmaller(vector<int>& heights,int n){
+        stack<int>s;
+        s.push(-1);
+        vector<int>ans(n);
+        
+        for(int i=n-1;i>=0;i--){
+            int cur=i;
+            while(s.top()!=-1 and heights[cur]<=heights[s.top()]){
+                s.pop();
+            }
+            ans[i]=s.top();
+            s.push(cur);
+        }
+        return ans;
+    }
+    
+      vector<int>prevSmaller(vector<int>& heights,int n){
+        stack<int>s;
+        s.push(-1);
+        vector<int>ans(n);
+        
+        for(int i=0;i<n;i++){
+            int cur=i;
+            while(s.top()!=-1 and heights[cur]<=heights[s.top()]){
+                s.pop();
+            }
+            ans[i]=s.top();
+            s.push(cur);
+        }
+        return ans;
+    }
+    
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        
+        int n=heights.size();
+//vector of indices of first smaller element from an element in previous direction
+            vector<int>prev(n);
+            prev=prevSmaller(heights,n);
+    //vector of indices of first smaller element from an element in next direction        
+             vector<int>next(n);
+            next=nextSmaller(heights,n);
+        
+      
+    
+        int Marea=INT_MIN;
+        int area;
+        
+        for(int i=0;i<n;i++){
+            //when all blocks are equal
+            if(next[i]==-1)
+                next[i]=n;
+            int b=next[i]-prev[i]-1;
+            area=heights[i]*b;
+            
+            Marea=max(Marea,area);
+        }
+        return Marea;
+    }
+};
